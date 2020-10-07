@@ -1,0 +1,394 @@
+#+TITLE: Emacs Config
+#+AUTHOR: Jacob Brink
+#+TOC: true
+
+This is my work-in-progress emacs configuration. Inspired by Jamie Collison and his [[https://github.com/jamiecollinson/dotfiles][dotfiles repository]], I have taken it upon myself to attempt to write my config file in a neater more organized way by writing it in org-mode.
+
+* Configuration
+
+** Package Initialization
+
+Make a list of packages that we want to always be installed. Whether this configuration file is being used for the first time or for the 100th time, this code should ensure that these packages are kept and installed if not already.
+
+#+BEGIN_SRC emacs-lisp
+(require 'package) ; todo: don't know what this does
+
+(setq package-archives  '(("elpa" . "http://tromey.com/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+			 ("magit" . "")
+			 ("MELPA" . "http://melpa.org/packages/")
+			 )) ; todo: don't really know if this is necessary
+
+; refresh packages
+(unless package-archive-contents 
+  (package-refresh-contents))
+
+(package-refresh-contents)
+
+(setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
+
+(require 'use-package)
+
+; ensure packages in package-list are always installed
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+#+END_SRC
+
+#+RESULTS:
+
+** PDF Tools
+
+Simple configuration for PDF Tools to work
+
+#+BEGIN_SRC emacs-lisp
+
+(use-package pdf-tools   
+:ensure t 
+:config   (pdf-tools-install)   
+(setq-default pdf-view-display-size 'fit-page))
+
+#+END_SRC
+
+** Description Popup
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'popup)
+
+(defun describe-thing-in-popup ()
+  (interactive)
+  (let* ((thing (symbol-at-point))
+         (help-xref-following t)
+         (description (save-window-excursion
+                        (with-temp-buffer
+                          (help-mode)
+                          (help-xref-interned thing)
+                          (buffer-string)))))
+    (popup-tip description
+               :point (point)
+               :around t
+               :height 20
+               :scroll-bar t
+               :margin t)))
+
+(define-key global-map "\C-x9" 'describe-thing-in-popup)
+
+#+END_SRC
+
+#+RESULTS:
+: describe-thing-in-popup
+
+** Move Auto Saves and Backups to single location
+
+I often find that Emacs's default way of handling auto saves and backups clutters up my project files. With the following lines of code, I fix this by moving them to an auto-save folder and a backup folder located in the home directory.
+
+#+BEGIN_SRC emacs-lisp
+; todo: cleanup
+;(setq auto-save-file-name-transforms
+;      `((".*" "~/.emacs-saves/\\2" t)))
+
+(setq auto-save-file-name-transforms
+      `((".*" "~/.emacs-saves/" t)))
+
+(setq backup-directory-alist '(("." . "~/.emacs-backup")))
+
+#+END_SRC
+
+** Privacy
+
+This should prevent the content of .gpg files from being auto saved and backed up by Emacs.
+
+#+BEGIN_SRC emacs-lisp
+
+(define-minor-mode sensitive-mode
+  "For sensitive files like password lists.
+It disables backup creation and auto saving.
+
+With no argument, this command toggles the mode.
+Non-null prefix argument turns on the mode.
+Null prefix argument turns off the mode."
+  ;; The initial value.
+  nil
+  ;; The indicator for the mode line.
+  " Sensitive"
+  ;; The minor mode bindings.
+  nil
+  (if (symbol-value sensitive-mode)
+      (progn
+	;; disable backups
+	(set (make-local-variable 'backup-inhibited) t)	
+	;; disable auto-save
+	(if auto-save-default
+	    (auto-save-mode -1)))
+					;resort to default value of backup-inhibited
+    (kill-local-variable 'backup-inhibited)
+					;resort to default auto save setting
+    (if auto-save-default
+      (auto-save-mode 1))))
+
+(setq auto-mode-alist
+      (append '(("\\.gpg$" . sensitive-mode))
+	      auto-mode-alist))
+
+#+END_SRC
+
+** Collapsable Code using Hideshow
+
+Sets up Hideshow to run in all buffers that support it, and to handle the error that happens when a buffer doesn't support it. I picked this up somewhere online, and somewhat forgot exactly what the issue was that required this weird work around.
+
+#+BEGIN_SRC emacs-lisp
+
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+(global-set-key (kbd "C-c <right>") 'hs-show-block)
+(global-set-key (kbd "C-c <left>") 'hs-hide-block)
+
+(defun my_hideshow-ignore-setup-failure() (ignore-errors (hs-minor-mode)))
+
+(define-globalized-minor-mode global-hs-minor-mode   hs-minor-mode my_hideshow-ignore-setup-failure)
+
+(my_hideshow-ignore-setup-failure)
+
+#+END_SRC
+
+** Windows PATH variable
+
+This makes sure that Emacs exec-path is linked to the PATH variable in Windows, making it easy for any program in Windows PATH to run in Emacs as well.
+
+#+BEGIN_SRC emacs-lisp
+
+(when (string-equal system-type "windows-nt")
+  (setq exec-path (split-string (getenv "PATH") path-separator))
+)
+
+#+END_SRC
+
+** Org-Mode Enhanced
+
+*** Setup
+
+Sets up a rudimentary org-mode setup, with org-capture for quick note taking and task scheduling, org-agenda for a clean view of scheduling tasks, and more.
+
+#+BEGIN_SRC emacs-lisp
+; todo: is this necessary?
+(add-hook 'org-mode-hook (lambda ()
+                           (local-set-key (kbd "C-c s") 'org-show-subtree)))
+
+(require 'org)
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+
+;(setq org-agenda-files (list "~/Dropbox/org-mode/tasks.org"
+;                             "~/Dropbox/org-mode/school_tasks.org"))
+(setq org-directory "~/Dropbox/org-mode")
+
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c C-l") 'org-insert-link)
+
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(setq org-agenda-files '("~/Dropbox/org-mode/"))
+
+#+END_SRC
+
+#+RESULTS:
+: 44
+
+*** Org-Agenda
+
+I tried complex custom org-agenda commands before, but this custom command seems to do a good enough job of adding just what is missing from the commands already provided by org-agenda.
+
+#+BEGIN_SRC emacs-lisp
+
+(setq org-agenda-custom-commands '(
+  ("1" "Events" agenda "display deadlines and exclude scheduled" (
+    (org-agenda-span 'week)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
+    (org-deadline-warning-days 1) ))
+    ))
+
+#+END_SRC
+
+*** Org-Capture
+
+The function template-factor reduces redundant code in org-capture templates.
+
+#+BEGIN_SRC emacs-lisp
+
+(defun template-factor (key description fileName header text)
+  `(,key
+    ,description
+    entry
+					; (file+headline ,(concat "~/org-mode/" fileName) ,header)
+    (file+headline ,(concat org-directory "/" fileName) ,header)
+    ,text
+    :prepend t
+    :empty-lines 1
+    :created t)
+  )
+
+(setq org-capture-templates
+      `(
+	,(template-factor
+	  "h"               ; key
+	  "Miscellaneous Note With Link" ; description
+	  "notes.org" ; file
+	  "Notes" "***** %^{Project} %^{Description} \n:PROPERTIES:\n:Created: %U\nLink: %a\n:END:\n\n" ; text
+	  )
+	("s" "School Task Menu")
+	,(template-factor
+	  "sl"              
+	  "School With Link"
+	  "school_tasks.org"
+	  "Tasks" "***** TODO %^{Todo} %? %^g%^g \n:PROPERTIES:\n:Created: %U\nLink: %a\n:END:\n\n"
+	  )
+	,(template-factor
+	  "sk"
+	  "School Without Link"
+	  "school_tasks.org"
+	  "Tasks"
+	  "***** TODO %^{Todo} %? %^g%^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
+	  )
+	,(template-factor
+	 "s"
+	 "School Tasks"
+	 "school_tasks.org"
+	 "TASKS"
+	 "***** TODO %^{Todo} %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
+	 )
+	,
+	(template-factor
+	  "n"
+	  "Generic Task"
+	  "tasks.org"
+	  "TASKS"
+	  "***** TODO %^{Todo} %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
+	  )
+	,(template-factor
+	  "z"
+	  "Testing template-factorfff"
+	  "template-factor.org"
+	  "template-factorf"
+	  "***** %^{template-factor-prompt}"
+	  )
+	("p" "Insert Useful Links")
+	,(template-factor
+	  "pe"
+	  "Emacs Resources"
+	  "resources.org"
+	  "Emacs"
+	  "***** %^{Description} \n:PROPERTIES:\n:Created: %U\n:ConfigLink: %a\n:WebLink: %^{Website URL} \n:END:\n\n"
+	  )
+	,(template-factor
+	  "pm"
+	  "Miscellaneous Resources"
+	  "resources.org"
+	  "Miscellaneous"
+	  "***** %^{Description} \n:PROPERTIES:\n:Created: %U\n:WebLink: %^{Website URL} \n:END:\n\n"
+	  )
+	,(template-factor
+	  "j"
+	  "Journal Entry"
+	  "journal.gpg"
+	  "Journal"
+	  "***** %U\n %^{Description}\n\n "
+	  )
+	,(template-factor
+	  "f"
+	  "Garbage Ideas"
+	  "garbage.org"
+	  "Stupid"
+	  "***** %U\n %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  )
+	))
+
+
+#+END_SRC
+
+** Magit
+
+Magit seems to crash repeatedly on Windows. When checking magit's website, it seems that this problem is not due to customization errors; instead, magit just doesn't fair well in a Windows environment.
+Here is [[https://emacs.stackexchange.com/questions/19440/magit-extremely-slow-in-windows-how-do-i-optimize][proof]].
+
+#+BEGIN_SRC emacs-lisp
+
+(if (string-equal system-type "windows-nt")
+  (define-key global-map (kbd "C-c g") (lambda () (interactive) (message "magit is disabled on windows")))
+  (define-key global-map (kbd "C-c g") 'magit-status)
+)
+
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (message magit is disabled on windows) |
+
+** Eyebrowse for Multitasking
+
+Four "tabs" for easier multitasking and organization.
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package eyebrowse
+    :diminish eyebrowse-mode
+    :config (progn
+	      (define-key eyebrowse-mode-map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
+	      (define-key eyebrowse-mode-map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
+	      (define-key eyebrowse-mode-map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
+	      (define-key eyebrowse-mode-map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
+	      (eyebrowse-mode t)
+	      (setq eyebrowse-new-workspace t)))
+
+#+END_SRC
+
+** Open System Terminal
+
+Thanks to [[https://emacs.stackexchange.com/questions/33525/how-to-open-systems-command-line-at-the-directory-of-the-current-buffer][this question]], a terminal window should be able to be opened.
+
+#+BEGIN_SRC emacs-lisp
+
+(defun open-terminal()
+  (interactive)
+  (start-process-shell-command (format "cmd(%s)" default-directory) nil "start cmd"))
+(global-set-key (kbd "C-c e") 'open-terminal)
+
+#+END_SRC
+
+#+RESULTS:
+: open-terminal
+
+** Spacemacs Theme
+
+#+BEGIN_SRC emacs-lisp
+
+  ;; (require 'spacemacs-common)
+
+  ;; (deftheme spacemacs-dark "Spacemacs theme, the dark version")
+
+  ;; (create-spacemacs-theme 'dark 'spacemacs-dark)
+  (load-theme 'spacemacs-dark t)
+
+#+END_SRC
+
+#+RESULTS:
+: t
+** Directory Tree
+
+[[https://github.com/jaypei/emacs-neotree][repo]]
+
+#+BEGIN_SRC emacs-lisp
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+(setq neo-theme 'ascii)
+(setq-default neo-show-hidden-files t)
+
+#+END_SRC
+
+#+RESULTS:
+: t

@@ -1,0 +1,5 @@
+*.html
+**/elpa/*
+**/url/*
+**/.cache/*
+auto-save-list/*

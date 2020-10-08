@@ -3,3 +3,9 @@
 **/url/*
 **/.cache/*
 auto-save-list/*
+bookmarks
+**/auto-save-list/**
+**/.emacs-backup/**
+**/.emacs-saves/**
+network-security.data
+places

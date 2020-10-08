@@ -46,10 +46,10 @@ Simple configuration for PDF Tools to work
 
 #+BEGIN_SRC emacs-lisp
 
-(use-package pdf-tools   
-:ensure t 
-:config   (pdf-tools-install)   
-(setq-default pdf-view-display-size 'fit-page))
+  ;; (use-package pdf-tools   
+  ;; :ensure t 
+  ;; :config   (pdf-tools-install)   
+  ;; (setq-default pdf-view-display-size 'fit-page))
 
 #+END_SRC
 
@@ -85,18 +85,25 @@ Simple configuration for PDF Tools to work
 ** Move Auto Saves and Backups to single location
 
 I often find that Emacs's default way of handling auto saves and backups clutters up my project files. With the following lines of code, I fix this by moving them to an auto-save folder and a backup folder located in the home directory.
+We create a directory if it doesn't exist for .emacs-saves, since unlike .emacs-backup settings, we change the file name location for save files and not the directory directly in the settings.
+As a result, if the directory doesn't exist for .emacs-saves, we get an ugly error.
 
 #+BEGIN_SRC emacs-lisp
-; todo: cleanup
-;(setq auto-save-file-name-transforms
-;      `((".*" "~/.emacs-saves/\\2" t)))
+(let ((save-dir "~/.emacs.d/.emacs-saves/"))
+   (progn
+     (make-directory save-dir :parents)
+     (setq auto-save-file-name-transforms
+       `((".*" ,save-dir t)))
+	)
+)
 
-(setq auto-save-file-name-transforms
-      `((".*" "~/.emacs-saves/" t)))
 
-(setq backup-directory-alist '(("." . "~/.emacs-backup")))
+(setq backup-directory-alist '(("." . "~/.emacs.d/.emacs-backup")))
 
 #+END_SRC
+
+#+RESULTS:
+: ((. . ~/.emacs.d/.emacs-backup))
 
 ** Privacy
 
@@ -182,9 +189,7 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-;(setq org-agenda-files (list "~/Dropbox/org-mode/tasks.org"
-;                             "~/Dropbox/org-mode/school_tasks.org"))
-(setq org-directory "~/Dropbox/org-mode")
+(setq org-directory "~/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -192,12 +197,12 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/Dropbox/org-mode/"))
+(setq org-agenda-files '("~/org-mode/"))
 
 #+END_SRC
 
 #+RESULTS:
-: 44
+| ~/University/org-mode/ |
 
 *** Org-Agenda
 

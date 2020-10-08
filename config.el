@@ -23,10 +23,10 @@
 
 (require 'use-package)
 
-(use-package pdf-tools   
-:ensure t 
-:config   (pdf-tools-install)   
-(setq-default pdf-view-display-size 'fit-page))
+;; (use-package pdf-tools   
+;; :ensure t 
+;; :config   (pdf-tools-install)   
+;; (setq-default pdf-view-display-size 'fit-page))
 
 (require 'popup)
 
@@ -48,14 +48,16 @@
 
 (define-key global-map "\C-x9" 'describe-thing-in-popup)
 
-; todo: cleanup
-;(setq auto-save-file-name-transforms
-;      `((".*" "~/.emacs-saves/\\2" t)))
+(let ((save-dir "~/.emacs.d/.emacs-saves/"))
+   (progn
+     (make-directory save-dir :parents)
+     (setq auto-save-file-name-transforms
+       `((".*" ,save-dir t)))
+	)
+)
 
-(setq auto-save-file-name-transforms
-      `((".*" "~/.emacs-saves/" t)))
 
-(setq backup-directory-alist '(("." . "~/.emacs-backup")))
+(setq backup-directory-alist '(("." . "~/.emacs.d/.emacs-backup")))
 
 (define-minor-mode sensitive-mode
   "For sensitive files like password lists.
@@ -110,9 +112,7 @@ Null prefix argument turns off the mode."
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-;(setq org-agenda-files (list "~/Dropbox/org-mode/tasks.org"
-;                             "~/Dropbox/org-mode/school_tasks.org"))
-(setq org-directory "~/Dropbox/org-mode")
+(setq org-directory "~/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -120,7 +120,7 @@ Null prefix argument turns off the mode."
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/Dropbox/org-mode/"))
+(setq org-agenda-files '("~/org-mode/"))
 
 (setq org-agenda-custom-commands '(
   ("1" "Events" agenda "display deadlines and exclude scheduled" (

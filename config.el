@@ -15,12 +15,13 @@
 
 (setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
 
-(require 'use-package)
-
 ; ensure packages in package-list are always installed
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+
+(require 'use-package)
 
 (use-package pdf-tools   
 :ensure t 

@@ -2,7 +2,7 @@
 #+AUTHOR: Jacob Brink
 #+TOC: true
 
-This is my work-in-progress emacs configuration. Inspired by Jamie Collison and his [[https://github.com/jamiecollinson/dotfiles][dotfiles repository]], I have taken it upon myself to write my config file in a neater more organized way by writing it in org-mode.
+This is my work-in-progress emacs configuration. Inspired by Jamie Collison and his [[https://github.com/jamiecollinson/dotfiles][dotfiles repository]], I have taken it upon myself to write my config file in a more organized way by writing it in org-mode.
 
 * Configuration
 

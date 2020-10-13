@@ -174,9 +174,8 @@ This makes sure that Emacs exec-path is linked to the PATH variable in Windows, 
 #+END_SRC
 
 ** Org-Mode Enhanced
-
 *** Setup
-
+    
 Sets up a rudimentary org-mode setup, with org-capture for quick note taking and task scheduling, org-agenda for a clean view of scheduling tasks, and more.
 
 #+BEGIN_SRC emacs-lisp
@@ -208,18 +207,54 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 
 I tried complex custom org-agenda commands before, but this custom command seems to do a good enough job of adding just what is missing from the commands already provided by org-agenda.
 
+Edit: After using org-agenda for a while, I find that I work in weekly blocks. What this means is that each week, usually Saturday night, I look ahead and org-capture all deadlines for the next week.
+Once the deadlines are recorded, I try to schedule those tasks for completion throughout the week. Once this process is done, the following custom org-agenda view labelled "Simple Org-Agenda View" will show
+the tasks for the current day and very importantly all items with deadlines but no scheduled time. The issue with this daily task view is that it is possible for me to have forgotten to schedule an event,
+and this where "Unscheduled Tasks" comes in. It shows me all events with a deadline but no scheduled time. Lastly, the complete overview is provided for context.
+
 #+BEGIN_SRC emacs-lisp
 
 (setq org-agenda-custom-commands '(
-  ("1" "Events" agenda "display deadlines and exclude scheduled" (
+  ("f" "Simple Org-Agenda View" 
+    (
+    (agenda "" (
+    (org-agenda-span 'day)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:scheduled :deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 1)
+    (org-agenda-overriding-header "Current Tasks")
+    ))
+
+    (agenda "" (
     (org-agenda-span 'week)
     (org-agenda-time-grid nil)
     (org-agenda-show-all-dates nil)
-    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
-    (org-deadline-warning-days 1) ))
+    (org-agenda-entry-types '(:deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 0)
+    (org-agenda-show-all-dates t)
+    (org-agenda-overriding-header "Unscheduled Tasks") 
     ))
+    
+    (agenda "" (
+    (org-agenda-span 'week)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:deadline :scheduled))
+    (org-agenda-show-all-dates t)
+    (org-deadline-warning-days 0)
+    (org-agenda-overriding-header "Complete Overview") 
+    ))
+  ))
+
+))
 
 #+END_SRC
+
+#+RESULTS:
+| f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates t) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |
 
 *** Org-Capture
 

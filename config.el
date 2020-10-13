@@ -129,7 +129,14 @@ Null prefix argument turns off the mode."
     (org-agenda-show-all-dates nil)
     (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
     (org-deadline-warning-days 1) ))
-    ))
+  ("t" "Simple Org-Agenda View" 
+  ((agenda "")
+   ( )
+  ))
+
+))
+
+(setq org-deadline-warning-days 0)
 
 (defun template-factor (key description fileName header text)
   `(,key

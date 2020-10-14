@@ -123,20 +123,41 @@ Null prefix argument turns off the mode."
 (setq org-agenda-files '("~/org-mode/"))
 
 (setq org-agenda-custom-commands '(
-  ("1" "Events" agenda "display deadlines and exclude scheduled" (
+  ("f" "Simple Org-Agenda View" 
+    (
+    (agenda "" (
+    (org-agenda-span 'day)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:scheduled :deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 1)
+    (org-agenda-overriding-header "Current Tasks")
+    ))
+
+    (agenda "" (
     (org-agenda-span 'week)
     (org-agenda-time-grid nil)
     (org-agenda-show-all-dates nil)
-    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
-    (org-deadline-warning-days 1) ))
-  ("t" "Simple Org-Agenda View" 
-  ((agenda "")
-   ( )
+    (org-agenda-entry-types '(:deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 0)
+    (org-agenda-show-all-dates t)
+    (org-agenda-overriding-header "Unscheduled Tasks") 
+    ))
+    
+    (agenda "" (
+    (org-agenda-span 'week)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:deadline :scheduled))
+    (org-agenda-show-all-dates t)
+    (org-deadline-warning-days 0)
+    (org-agenda-overriding-header "Complete Overview") 
+    ))
   ))
 
 ))
-
-(setq org-deadline-warning-days 0)
 
 (defun template-factor (key description fileName header text)
   `(,key

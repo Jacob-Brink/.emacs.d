@@ -249,12 +249,15 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
     ))
   ))
 
+  ("i" "Random ideas" todo "" ((org-agenda-files '("~/org-mode/garbage.org"))))
+
 ))
 
 #+END_SRC
 
 #+RESULTS:
-| f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates t) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |
+| f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates t) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |   |                                                       |
+| i | Random ideas           | todo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |   | ((org-agenda-files (quote (~/org-mode/garbage.org)))) |
 
 *** Org-Capture
 
@@ -311,13 +314,6 @@ The function template-factor reduces redundant code in org-capture templates.
 	  "TASKS"
 	  "***** TODO %^{Todo} %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
 	  )
-	,(template-factor
-	  "z"
-	  "Testing template-factorfff"
-	  "template-factor.org"
-	  "template-factorf"
-	  "***** %^{template-factor-prompt}"
-	  )
 	("p" "Insert Useful Links")
 	,(template-factor
 	  "pe"
@@ -341,16 +337,19 @@ The function template-factor reduces redundant code in org-capture templates.
 	  "***** %U\n %^{Description}\n\n "
 	  )
 	,(template-factor
-	  "f"
-	  "Garbage Ideas"
+	  "r"
+	  "Random Ideas"
 	  "garbage.org"
 	  "Stupid"
-	  "***** %U\n %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
 	  )
 	))
 
 
 #+END_SRC
+
+#+RESULTS:
+| h | Miscellaneous Note With Link | entry | (file+headline ~/org-mode/notes.org Notes) | ***** %^{Project} %^{Description} |
 
 ** Magit
 
@@ -433,3 +432,4 @@ Thanks to [[https://emacs.stackexchange.com/questions/33525/how-to-open-systems-
 
 #+RESULTS:
 : t
+** Mode Activated Themes

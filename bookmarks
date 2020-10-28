@@ -4,7 +4,7 @@
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
 (("org-capture-last-stored"
  (filename . "~/org-mode/school_tasks.org")
- (front-context-string . "***** TODO IMpor")
+ (front-context-string . "***** TODO Delet")
  (rear-context-string . "ol\n\n**** Tasks\n\n")
  (position . 198))
 )

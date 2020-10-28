@@ -125,16 +125,7 @@ Null prefix argument turns off the mode."
 (setq org-agenda-custom-commands '(
   ("f" "Simple Org-Agenda View" 
     (
-    (agenda "" (
-    (org-agenda-span 'day)
-    (org-agenda-time-grid nil)
-    (org-agenda-show-all-dates nil)
-    (org-agenda-entry-types '(:scheduled :deadline))
-    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
-    (org-deadline-warning-days 1)
-    (org-agenda-overriding-header "Current Tasks")
-    ))
-
+    
     (agenda "" (
     (org-agenda-span 'week)
     (org-agenda-time-grid nil)
@@ -144,6 +135,17 @@ Null prefix argument turns off the mode."
     (org-deadline-warning-days 0)
     (org-agenda-show-all-dates t)
     (org-agenda-overriding-header "Unscheduled Tasks") 
+    ))
+
+
+    (agenda "" (
+    (org-agenda-span 'day)
+    (org-agenda-time-grid nil)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-entry-types '(:scheduled :deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 1)
+    (org-agenda-overriding-header "Current Tasks")
     ))
     
     (agenda "" (
@@ -155,7 +157,11 @@ Null prefix argument turns off the mode."
     (org-deadline-warning-days 0)
     (org-agenda-overriding-header "Complete Overview") 
     ))
-  ))
+
+  )
+)
+
+  ("i" "Random ideas" todo "" ((org-agenda-files '("~/org-mode/garbage.org"))))
 
 ))
 
@@ -208,13 +214,6 @@ Null prefix argument turns off the mode."
 	  "TASKS"
 	  "***** TODO %^{Todo} %? %^g \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
 	  )
-	,(template-factor
-	  "z"
-	  "Testing template-factorfff"
-	  "template-factor.org"
-	  "template-factorf"
-	  "***** %^{template-factor-prompt}"
-	  )
 	("p" "Insert Useful Links")
 	,(template-factor
 	  "pe"
@@ -238,11 +237,11 @@ Null prefix argument turns off the mode."
 	  "***** %U\n %^{Description}\n\n "
 	  )
 	,(template-factor
-	  "f"
-	  "Garbage Ideas"
+	  "r"
+	  "Random Ideas"
 	  "garbage.org"
 	  "Stupid"
-	  "***** %U\n %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
 	  )
 	))
 

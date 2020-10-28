@@ -217,6 +217,18 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
 (setq org-agenda-custom-commands '(
   ("f" "Simple Org-Agenda View" 
     (
+    
+    (agenda "" (
+    (org-agenda-span 'week)
+    (org-agenda-time-grid nil)
+    (org-agenda-entry-types '(:deadline))
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
+    (org-deadline-warning-days 0)
+    (org-agenda-show-all-dates nil)
+    (org-agenda-overriding-header "Unscheduled Tasks") 
+    ))
+
+
     (agenda "" (
     (org-agenda-span 'day)
     (org-agenda-time-grid nil)
@@ -225,17 +237,6 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
     (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))
     (org-deadline-warning-days 1)
     (org-agenda-overriding-header "Current Tasks")
-    ))
-
-    (agenda "" (
-    (org-agenda-span 'week)
-    (org-agenda-time-grid nil)
-    (org-agenda-show-all-dates nil)
-    (org-agenda-entry-types '(:deadline))
-    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
-    (org-deadline-warning-days 0)
-    (org-agenda-show-all-dates t)
-    (org-agenda-overriding-header "Unscheduled Tasks") 
     ))
     
     (agenda "" (
@@ -247,7 +248,9 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
     (org-deadline-warning-days 0)
     (org-agenda-overriding-header "Complete Overview") 
     ))
-  ))
+
+  )
+)
 
   ("i" "Random ideas" todo "" ((org-agenda-files '("~/org-mode/garbage.org"))))
 
@@ -256,8 +259,8 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
 #+END_SRC
 
 #+RESULTS:
-| f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates t) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |   |                                                       |
-| i | Random ideas           | todo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |   | ((org-agenda-files (quote (~/org-mode/garbage.org)))) |
+| f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates nil) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |   |                                                       |
+| i | Random ideas           | todo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |   | ((org-agenda-files (quote (~/org-mode/garbage.org)))) |
 
 *** Org-Capture
 

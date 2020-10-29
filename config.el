@@ -129,11 +129,10 @@ Null prefix argument turns off the mode."
     (agenda "" (
     (org-agenda-span 'week)
     (org-agenda-time-grid nil)
-    (org-agenda-show-all-dates nil)
     (org-agenda-entry-types '(:deadline))
     (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
     (org-deadline-warning-days 0)
-    (org-agenda-show-all-dates t)
+    (org-agenda-show-all-dates nil)
     (org-agenda-overriding-header "Unscheduled Tasks") 
     ))
 

@@ -215,6 +215,42 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
 #+BEGIN_SRC emacs-lisp
 
 (setq org-agenda-custom-commands '(
+  ("g" "Movies"
+    (
+     (todo "TODO" (
+       (org-agenda-overriding-header "Media to enjoy")
+       (org-agenda-files '("~/org-mode/media.org"))
+      ))
+
+      (todo "DUMB" (
+       (org-agenda-overriding-header "Dumb like Dumb and Dumber")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+      (todo "MASTERPIECE" (
+       (org-agenda-overriding-header "Masterpiece")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+      (todo "VERYGOOD" (
+       (org-agenda-overriding-header "Very good, but not masterpiece")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+       (todo "SOLID" (
+       (org-agenda-overriding-header "Passable, decent, but not amazing")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+       (todo "ALRIGHT" (
+       (org-agenda-overriding-header "Eh, not good, not bad")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+
+     )
+   )
+
   ("f" "Simple Org-Agenda View" 
     (
     
@@ -259,6 +295,7 @@ and this where "Unscheduled Tasks" comes in. It shows me all events with a deadl
 #+END_SRC
 
 #+RESULTS:
+| g | Movies                 | ((todo TODO ((org-agenda-overriding-header Media to enjoy) (org-agenda-files (quote (~/org-mode/media.org))))) (todo BAD ((org-agenda-overriding-header Media Rating) (org-agenda-files (quote (~/org-mode/media.org))))) (todo GOOD ((org-agenda-overriding-header Media Rating) (org-agenda-files (quote (~/org-mode/media.org))))) (todo AMAZING ((org-agenda-overriding-header Media Rating) (org-agenda-files (quote (~/org-mode/media.org))))))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |   |                                                       |
 | f | Simple Org-Agenda View | ((agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-entry-types (quote (:deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote scheduled) (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 0) (org-agenda-show-all-dates nil) (org-agenda-overriding-header Unscheduled Tasks))) (agenda  ((org-agenda-span (quote day)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:scheduled :deadline))) (org-agenda-skip-function (quote (org-agenda-skip-entry-if (quote todo) (quote (DONE CANCELLED))))) (org-deadline-warning-days 1) (org-agenda-overriding-header Current Tasks))) (agenda  ((org-agenda-span (quote week)) (org-agenda-time-grid nil) (org-agenda-show-all-dates nil) (org-agenda-entry-types (quote (:deadline :scheduled))) (org-agenda-show-all-dates t) (org-deadline-warning-days 0) (org-agenda-overriding-header Complete Overview)))) |   |                                                       |
 | i | Random ideas           | todo                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |   | ((org-agenda-files (quote (~/org-mode/garbage.org)))) |
 
@@ -344,8 +381,15 @@ The function template-factor reduces redundant code in org-capture templates.
 	  "Random Ideas"
 	  "garbage.org"
 	  "Stupid"
-	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
 	  )
+	,(template-factor
+	  "m"
+	  "Movie Idea"
+	  "media.org"
+	  "Media"
+	  "* TODO %^{Media Title} \n:PROPERTIES:\n:CREATED: %U\n:ENd:\n\n"
+	 )
 	))
 
 

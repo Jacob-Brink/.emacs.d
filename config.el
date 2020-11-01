@@ -123,6 +123,42 @@ Null prefix argument turns off the mode."
 (setq org-agenda-files '("~/org-mode/"))
 
 (setq org-agenda-custom-commands '(
+  ("g" "Movies"
+    (
+     (todo "TODO" (
+       (org-agenda-overriding-header "Media to enjoy")
+       (org-agenda-files '("~/org-mode/media.org"))
+      ))
+
+      (todo "DUMB" (
+       (org-agenda-overriding-header "Dumb like Dumb and Dumber")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+      (todo "MASTERPIECE" (
+       (org-agenda-overriding-header "Masterpiece")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+      (todo "VERYGOOD" (
+       (org-agenda-overriding-header "Very good, but not masterpiece")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+       (todo "SOLID" (
+       (org-agenda-overriding-header "Passable, decent, but not amazing")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+       (todo "ALRIGHT" (
+       (org-agenda-overriding-header "Eh, not good, not bad")
+       (org-agenda-files '("~/org-mode/media.org"))
+       ))
+
+
+     )
+   )
+
   ("f" "Simple Org-Agenda View" 
     (
     
@@ -240,8 +276,15 @@ Null prefix argument turns off the mode."
 	  "Random Ideas"
 	  "garbage.org"
 	  "Stupid"
-	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
 	  )
+	,(template-factor
+	  "m"
+	  "Movie Idea"
+	  "media.org"
+	  "Media"
+	  "* TODO %^{Media Title} \n:PROPERTIES:\n:CREATED: %U\n:ENd:\n\n"
+	 )
 	))
 
 (if (string-equal system-type "windows-nt")

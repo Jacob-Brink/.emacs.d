@@ -188,7 +188,7 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(setq org-directory "~/org-mode")
+(setq org-directory "~/linode/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -196,9 +196,15 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/org-mode/"))
+(setq org-agenda-files '("~/linode/org-mode/"))
 
 #+END_SRC
+
+Code to get the linode directory setup on boot with /etc/fstab. For some reason, without workaround=rename 0 0 this configuration doesn't work, but also doesn't throw an error. Instead, it just leaves the linode folder empty.
+
+#+begin_src
+user@host:REMOTE_PATH LOCAL_HOME/linode fuse.sshfs IdentityFile=HOME/.ssh/id_rsa,_netdev,x-systemd,auto,delay_connect,idmap=user,uid=1000,gid=1000,umask=0,allow_other,workaround=rename 0 0
+#+end_src
 
 #+RESULTS:
 | ~/University/org-mode/ |

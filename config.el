@@ -112,7 +112,7 @@ Null prefix argument turns off the mode."
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(setq org-directory "~/org-mode")
+(setq org-directory "~/linode/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -120,39 +120,39 @@ Null prefix argument turns off the mode."
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/org-mode/"))
+(setq org-agenda-files '("~/linode/org-mode/"))
 
 (setq org-agenda-custom-commands '(
   ("g" "Movies"
     (
      (todo "TODO" (
        (org-agenda-overriding-header "Media to enjoy")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
       ))
 
       (todo "DUMB" (
        (org-agenda-overriding-header "Dumb like Dumb and Dumber")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
        ))
 
       (todo "MASTERPIECE" (
        (org-agenda-overriding-header "Masterpiece")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
        ))
 
       (todo "VERYGOOD" (
        (org-agenda-overriding-header "Very good, but not masterpiece")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
        ))
 
        (todo "SOLID" (
        (org-agenda-overriding-header "Passable, decent, but not amazing")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
        ))
 
        (todo "ALRIGHT" (
        (org-agenda-overriding-header "Eh, not good, not bad")
-       (org-agenda-files '("~/org-mode/media.org"))
+       (org-agenda-files '("~/linode/org-mode/media.org"))
        ))
 
 

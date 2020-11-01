@@ -188,7 +188,7 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(setq org-directory "~/linode/org-mode")
+(setq org-directory "~/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -196,12 +196,12 @@ Sets up a rudimentary org-mode setup, with org-capture for quick note taking and
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/linode/org-mode/"))
+(setq org-agenda-files '("~/org-mode/"))
 
 #+END_SRC
 
 #+RESULTS:
-| ~/linode/org-mode/ |
+| ~/University/org-mode/ |
 
 *** Org-Agenda
 

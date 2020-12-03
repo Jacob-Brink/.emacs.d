@@ -1,24 +1,23 @@
 (require 'package) ; todo: don't know what this does
 
-(setq package-archives  '(("elpa" . "http://tromey.com/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("magit" . "")
-			 ("MELPA" . "http://melpa.org/packages/")
-			 )) ; todo: don't really know if this is necessary
+;; (setq package-archives  '(;("elpa" . "http://tromey.com/elpa/")
+;; 			 ("gnu" . "http://elpa.gnu.org/packages/")
+;; 			 ("marmalade" . "http://marmalade-repo.org/packages/")
+;; 			 ("MELPA" . "http://melpa.org/packages/")
+;; 			 )) ; todo: don't really know if this is necessary
 
-; refresh packages
+;; ; refresh
 (unless package-archive-contents 
   (package-refresh-contents))
 
 (package-refresh-contents)
 
-(setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
+; (setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
 
 ; ensure packages in package-list are always installed
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+;; (dolist (package package-list)
+;;   (unless (package-installed-p package)
+;;     (package-install package)))
 
 
 (require 'use-package)
@@ -287,6 +286,13 @@ Null prefix argument turns off the mode."
 	 )
 	))
 
+(add-hook 'org-mode-hook (lambda ()
+   "Beautify Org Checkbox Symbol"
+   (push '("[ ]" .  "☐") prettify-symbols-alist)
+   (push '("[X]" . "☑" ) prettify-symbols-alist)
+   (push '("*" . "❍" ) prettify-symbols-alist)
+   (prettify-symbols-mode)))
+
 (if (string-equal system-type "windows-nt")
   (define-key global-map (kbd "C-c g") (lambda () (interactive) (message "magit is disabled on windows")))
   (define-key global-map (kbd "C-c g") 'magit-status)
@@ -318,3 +324,12 @@ Null prefix argument turns off the mode."
 (global-set-key [f8] 'neotree-toggle)
 (setq neo-theme 'ascii)
 (setq-default neo-show-hidden-files t)
+
+(if window-system
+    (progn
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (toggle-scroll-bar -1))
+)
+
+(setq create-lockfiles nil)

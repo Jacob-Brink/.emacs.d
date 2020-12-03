@@ -5,36 +5,34 @@
 This is my work-in-progress emacs configuration. Inspired by Jamie Collison and his [[https://github.com/jamiecollinson/dotfiles][dotfiles repository]], I have taken it upon myself to write my config file in a more organized way by writing it in org-mode.
 
 * Configuration
-
 ** Package Initialization
 
 Make a list of packages that we want to always be installed. Whether this configuration file is being used for the first time or for the 100th time, this code should ensure that these packages are kept and installed if not already.
 
 #+BEGIN_SRC emacs-lisp
-(require 'package) ; todo: don't know what this does
+  (require 'package) ; todo: don't know what this does
 
-(setq package-archives  '(("elpa" . "http://tromey.com/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("magit" . "")
-			 ("MELPA" . "http://melpa.org/packages/")
-			 )) ; todo: don't really know if this is necessary
+  ;; (setq package-archives  '(;("elpa" . "http://tromey.com/elpa/")
+  ;; 			 ("gnu" . "http://elpa.gnu.org/packages/")
+  ;; 			 ("marmalade" . "http://marmalade-repo.org/packages/")
+  ;; 			 ("MELPA" . "http://melpa.org/packages/")
+  ;; 			 )) ; todo: don't really know if this is necessary
 
-; refresh packages
-(unless package-archive-contents 
-  (package-refresh-contents))
+  ;; ; refresh
+  (unless package-archive-contents 
+    (package-refresh-contents))
 
-(package-refresh-contents)
+  (package-refresh-contents)
 
-(setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
+  ; (setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
 
-; ensure packages in package-list are always installed
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+  ; ensure packages in package-list are always installed
+  ;; (dolist (package package-list)
+  ;;   (unless (package-installed-p package)
+  ;;     (package-install package)))
 
 
-(require 'use-package)
+  (require 'use-package)
 
 #+END_SRC
 
@@ -401,8 +399,18 @@ The function template-factor reduces redundant code in org-capture templates.
 
 #+END_SRC
 
+*** Icons
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook (lambda ()
+   "Beautify Org Checkbox Symbol"
+   (push '("[ ]" .  "☐") prettify-symbols-alist)
+   (push '("[X]" . "☑" ) prettify-symbols-alist)
+   (push '("*" . "❍" ) prettify-symbols-alist)
+   (prettify-symbols-mode)))
+#+end_src
+
 #+RESULTS:
-| h | Miscellaneous Note With Link | entry | (file+headline ~/org-mode/notes.org Notes) | ***** %^{Project} %^{Description} |
+| (lambda nil Beautify Org Checkbox Symbol (push '([ ] . ☐) prettify-symbols-alist) (push '([X] . ☑) prettify-symbols-alist) (push '([-] . ❍) prettify-symbols-alist) (prettify-symbols-mode)) | (lambda nil (local-set-key (kbd C-c s) 'org-show-subtree)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
 
 ** Magit
 
@@ -485,4 +493,19 @@ Thanks to [[https://emacs.stackexchange.com/questions/33525/how-to-open-systems-
 
 #+RESULTS:
 : t
-** Mode Activated Themes
+** Remove Toolbar
+#+BEGIN_SRC emacs-lisp
+(if window-system
+    (progn
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (toggle-scroll-bar -1))
+)
+#+END_SRC
+
+#+RESULTS:
+
+** Angular Emacs Lock Files Hack
+#+begin_src emacs-lisp
+(setq create-lockfiles nil)
+#+end_src

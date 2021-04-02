@@ -8,6 +8,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#0a0814" "#f2241f" "#67b11d" "#b1951d" "#4f97d7" "#a31db1" "#28def0" "#b2b2b2"])
  '(custom-enabled-themes '(spacemacs-light))
@@ -32,7 +34,7 @@
      ("\\?\\?\\?+" . "#dc752f")))
  '(org-export-with-toc 10)
  '(package-selected-packages
-   '(ampc typescript-mode eziam-theme rjsx-mode neotree use-package spacemacs-theme org-ref org-noter org-journal magit hackernews eyebrowse))
+   '(org-bullets ampc typescript-mode eziam-theme rjsx-mode neotree use-package spacemacs-theme org-ref org-noter org-journal magit hackernews eyebrowse))
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(vc-annotate-background "#eeeeee"))
 (custom-set-faces
@@ -40,4 +42,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(org-document-title ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif" :height 1.5 :underline nil))))
+ '(org-level-1 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif" :height 1.75))))
+ '(org-level-2 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif" :height 1.5))))
+ '(org-level-3 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif" :height 1.25))))
+ '(org-level-4 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif" :height 1.1))))
+ '(org-level-5 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif"))))
+ '(org-level-6 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif"))))
+ '(org-level-7 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif"))))
+ '(org-level-8 ((t (:inherit default :weight bold :foreground "#655370" :family "Sans Serif")))))

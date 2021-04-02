@@ -1,24 +1,26 @@
 (require 'package) ; todo: don't know what this does
 
-(setq package-archives  '(("elpa" . "http://tromey.com/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("magit" . "")
-			 ("MELPA" . "http://melpa.org/packages/")
-			 )) ; todo: don't really know if this is necessary
+;; (setq package-archives  '(;("elpa" . "http://tromey.com/elpa/")
+;; 		       ;("gnu" . "http://elpa.gnu.org/packages/")
+;; 		       ;("marmalade" . "http://marmalade-repo.org/packages/")
+;; 		       ("MELPA" . "http://melpa.org/packages/")
+;; 		       ))
 
-; refresh packages
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+;; ; refresh
 (unless package-archive-contents 
   (package-refresh-contents))
 
 (package-refresh-contents)
 
-(setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
+; (setq package-list '(org-journal eyebrowse org-ref pdf-tools org-noter magit htmlize use-package spacemacs-theme neotree))
 
 ; ensure packages in package-list are always installed
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+;; (dolist (package package-list)
+;;   (unless (package-installed-p package)
+;;     (package-install package)))
 
 
 (require 'use-package)
@@ -112,7 +114,7 @@ Null prefix argument turns off the mode."
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
 
-(setq org-directory "~/org-mode")
+(setq org-directory "~/linode/org-mode")
 
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c C-l") 'org-insert-link)
@@ -120,11 +122,55 @@ Null prefix argument turns off the mode."
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-files '("~/org-mode/"))
+(setq org-agenda-files '("~/linode/org-mode/"))
 
 (setq org-agenda-custom-commands '(
+  ("g" "Movies"
+    (
+     (todo "TODO" (
+       (org-agenda-overriding-header "Media to enjoy")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+      ))
+
+      (todo "DUMB" (
+       (org-agenda-overriding-header "Dumb like Dumb and Dumber")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+       ))
+
+      (todo "MASTERPIECE" (
+       (org-agenda-overriding-header "Masterpiece")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+       ))
+
+      (todo "VERYGOOD" (
+       (org-agenda-overriding-header "Very good, but not masterpiece")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+       ))
+
+       (todo "SOLID" (
+       (org-agenda-overriding-header "Passable, decent, but not amazing")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+       ))
+
+       (todo "ALRIGHT" (
+       (org-agenda-overriding-header "Eh, not good, not bad")
+       (org-agenda-files '("~/linode/org-mode/media.org"))
+       ))
+
+
+     )
+   )
+
   ("f" "Simple Org-Agenda View" 
     (
+    
+    (todo "" (
+    (org-agenda-time-grid nil)
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline 'todo '("DONE" "CANCELLED")))
+    (org-agenda-show-all-dates nil)
+    (org-agenda-files '("~/linode/org-mode/inbox.org"))
+    (org-agenda-overriding-header "Inbox") 
+    ))
     
     (agenda "" (
     (org-agenda-span 'week)
@@ -133,7 +179,7 @@ Null prefix argument turns off the mode."
     (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'todo '("DONE" "CANCELLED")))
     (org-deadline-warning-days 0)
     (org-agenda-show-all-dates nil)
-    (org-agenda-overriding-header "Unscheduled Tasks") 
+    (org-agenda-overriding-header "Unscheduled Deadlined Tasks") 
     ))
 
 
@@ -240,9 +286,23 @@ Null prefix argument turns off the mode."
 	  "Random Ideas"
 	  "garbage.org"
 	  "Stupid"
-	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n "
+	  "***** TODO %^{Description} \n:PROPERTIES:\n:Created: %U\n:END:\n\n"
 	  )
+	,(template-factor
+	  "m"
+	  "Movie Idea"
+	  "media.org"
+	  "Media"
+	  "* TODO %^{Media Title} \n:PROPERTIES:\n:CREATED: %U\n:ENd:\n\n"
+	 )
 	))
+
+(add-hook 'org-mode-hook (lambda ()
+   "Beautify Org Checkbox Symbol"
+   (push '("[ ]" .  "☐") prettify-symbols-alist)
+   (push '("[X]" . "☑" ) prettify-symbols-alist)
+   (push '("*" . "❍" ) prettify-symbols-alist)
+   (prettify-symbols-mode)))
 
 (if (string-equal system-type "windows-nt")
   (define-key global-map (kbd "C-c g") (lambda () (interactive) (message "magit is disabled on windows")))
@@ -275,3 +335,43 @@ Null prefix argument turns off the mode."
 (global-set-key [f8] 'neotree-toggle)
 (setq neo-theme 'ascii)
 (setq-default neo-show-hidden-files t)
+
+(if window-system
+    (progn
+     (menu-bar-mode -1)
+     (tool-bar-mode -1)
+     (toggle-scroll-bar -1))
+)
+
+(setq create-lockfiles nil)
+
+(setq org-hide-emphasis-markers t) ; https://orgmode.org/manual/Emphasis-and-Monospace.html
+
+     (font-lock-add-keywords 'org-mode
+			   '(("^ +\\([-*]\\) " (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+     (require 'org-bullets)
+     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+   (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+				    ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+				    ((x-list-fonts "Verdana")         '(:font "Verdana"))
+				    ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+				    (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+	      (base-font-color     (face-foreground 'default nil 'default))
+	      (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+	 (custom-theme-set-faces 'user
+				 `(org-level-8 ((t (,@headline ,@variable-tuple))))
+				 `(org-level-7 ((t (,@headline ,@variable-tuple))))
+				 `(org-level-6 ((t (,@headline ,@variable-tuple))))
+				 `(org-level-5 ((t (,@headline ,@variable-tuple))))
+				 `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+				 `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+				 `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+				 `(org-level-1 ((t (,@headline ,@variable-tuple :height 2.0))))
+				 `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
+
+ (require 'org-tempo)
+
+(org-babel-do-load-languages 'org-babel-load-languages '( (python . t) ) )
